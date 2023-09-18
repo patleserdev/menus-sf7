@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Gestion de nos menus</h1>
+
+    
+    <ul>Objectifs</ul>
+    <li>Générer une liste de menus pour la semaine <i class="bi bi-check"></i></li>
+
+        <li>En déduire une liste d'ingrédients gérés par nombre de personnes</li>
+        <li>Générer la liste de courses en pdf ou mail ou etc ...</li>
+        <li>Intégrer le menu joker</li>
+        <li>Dans les menus, pouvoir préciser la quantité de tel ou tel ingrédient basé sur les mesures des ingrédients</li>
+    </ul>
+
+
+    <ul>Objets nécessaires
+    <li>Menu - titre - description - relation recette (OnetoMany) <i class="bi bi-check"></i>
+    </li>
+    <li>recette - titre - description - date - relation menu (OnetoMany) - relation ingrédients(OnetoMany) <i class="bi bi-check"></i>
+    </li>
+    <li>Ingrédients - titre - description - mesure <i class="bi bi-check"></i>
+    </li>
+    
+</div>
+
+{% endblock %}

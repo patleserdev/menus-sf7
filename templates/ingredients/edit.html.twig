@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Ingredients{% endblock %}
+
+{% block body %}
+    <h1>Modifier Ingredients</h1>
+
+    {{ include('ingredients/_form.html.twig', {'button_label': 'Update'}) }}
+
+<div class="col-lg-12 mt-2"> <a  class="btn btn-primary" href="{{ path('app_ingredients_index') }}">Retour à la liste</a></div>
+
+    {{ include('ingredients/_delete_form.html.twig') }}
+{% endblock %}

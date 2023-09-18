@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Recette{% endblock %}
+
+{% block body %}
+    <h1>Modifier Recette</h1>
+
+    {{ include('recettes/_form.html.twig', {'button_label': 'Update'}) }}
+
+<div class="col-lg-12 mt-2"><a  class="btn btn-primary" href="{{ path('app_recettes_index') }}">Retour à la liste</a></div>
+
+    {{ include('recettes/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des ingrédients{% endblock %}
+
+{% block body %}
+    <h1>Liste des ingrédients</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Mesure</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ingredient in ingredients %}
+            <tr>
+                <td>{{ ingredient.id }}</td>
+                <td>{{ ingredient.title }}</td>
+                <td>{{ ingredient.description }}</td>
+                <td>{{ ingredient.mesure }}</td>
+                <td>
+                    <a  class="btn btn-primary" href="{{ path('app_ingredients_show', {'id': ingredient.id}) }}">Voir</a>
+                    <a  class="btn btn-primary" href="{{ path('app_ingredients_edit', {'id': ingredient.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucun ingrédient</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('app_ingredients_new') }}">Nouvel ingrédient</a>
+{% endblock %}

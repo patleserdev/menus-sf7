@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recettes{% endblock %}
+
+{% block body %}
+    <h1>Recettes</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ recette.id }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ recette.titre }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ recette.description }}</td>
+            </tr>
+<tr>
+<th>Ingrédients</th>
+    
+    <td>
+            {% for ingredient in recette.getIngredients %}
+                
+         {{ ingredient.title }} <br/>
+        {% endfor %}
+
+    </td>
+
+    </tr>
+        </tbody>
+    </table>
+
+    <div class="col-lg-12 mt-2"> <a  class="btn btn-primary" href="{{ path('app_recettes_index') }}">Retour à la liste</a></div>
+
+<div class="col-lg-12 mt-2"><a  class="btn btn-primary" href="{{ path('app_recettes_edit', {'id': recette.id}) }}">Modifier</a></div>
+
+    {{ include('recettes/_delete_form.html.twig') }}
+{% endblock %}

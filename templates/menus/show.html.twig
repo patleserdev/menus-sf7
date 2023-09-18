@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Menus{% endblock %}
+
+{% block body %}
+    <h1>Menus</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ menu.id }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ menu.title }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ menu.description }}</td>
+            </tr>
+
+            <tr>
+            <th>Recettes</th>
+           
+
+                {% for recette in menu.recettes %}
+                
+            <td> {{ recette.titre }} </td>
+            {% endfor %}
+        </tr>
+
+
+        </tbody>
+    </table>
+
+<div class="col-lg-12 mt-2"><a  class="btn btn-primary" href="{{ path('app_menus_index') }}">Retour à la liste</a></div>
+
+<div class="col-lg-12 mt-2"> <a  class="btn btn-primary" href="{{ path('app_menus_edit', {'id': menu.id}) }}">Modifier</a></div>
+
+    {{ include('menus/_delete_form.html.twig') }}
+{% endblock %}
