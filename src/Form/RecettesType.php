@@ -21,34 +21,18 @@ class RecettesType extends AbstractType
             ->add('titre')
             ->add('description')
             //->add('menus')
-            ->add('ingredients')
-            
-/***
-            ->add('ingredientsByRecettes', CollectionType::class, [
-                'label'=> false,
-                'required' => false,
+            ->add('ingredients', EntityType::class, [
                 // looks for choices from this entity
-                'class' => Recettes::class,
+                'class' => Ingredients::class,
             
                 // uses the User.username property as the visible option string
-                'choice_label' => 'ingredientsByRecettes',
+                'choice_label' => 'title',
             
                 // used to render a select box, check boxes or radios
-                'multiple' => true,
+                 'multiple' => true,
                  'expanded' => true,
-            ]);
-**/
-
-/***
-            ->add('ingredientsByRecettes', CollectionType::class, [
-                // each entry in the array will be an "email" field
-                'entry_type' => IngredientsByRecetteType::class,
-                // these options are passed to each "email" type
-                'entry_options' => [
-                    'attr' => ['class' => 'quantity'],
-                ],
-            ]);
-**/
+            ])
+            
 
             ->add('ingredientsByRecettes', CollectionType::class, [
                 'entry_type' => IngredientsByRecetteType::class,

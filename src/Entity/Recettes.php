@@ -27,7 +27,7 @@ class Recettes
     #[ORM\ManyToMany(targetEntity: Menus::class, mappedBy: 'recettes')]
     private Collection $menuses;
 
-    #[ORM\OneToMany(mappedBy: 'recette', targetEntity: IngredientsByRecette::class)]
+    #[ORM\OneToMany(mappedBy: 'recette', targetEntity: IngredientsByRecette::class,cascade: ["persist"])]
     private Collection $ingredientsByRecettes;
 
     public function __construct()

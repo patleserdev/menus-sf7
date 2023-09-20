@@ -1,4 +1,95 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+
+
+{{ form_row(form.titre) }}
+
+{{ form_row(form.description) }}
+
+{{ form_row(form.ingredients) }}
+
+
+<ul class="ingredientsByRecettes"
+    data-index="{{ form.ingredientsByRecettes|length > 0 ? form.ingredientsByRecettes|last.vars.name + 1 : 0 }}"
+    data-prototype="{{ form_widget(form.ingredientsByRecettes.vars.prototype.quantity)|e('html_attr') }}"
+
+
+>
+</ul>
+
     <button class="btn btn-primary">{{ button_label|default('Sauvegarder') }}</button>
+
+
 {{ form_end(form) }}
+
+
+
+
+<script>
+
+    $( document ).ready(function() {
+    $("#recettes_ingredients").append("<div class='quantity-options'></div>");
+    });
+
+    
+
+     $('body').on('click','.form-check', function(){
+
+     var entree=$( this).find("input[type=checkbox][name='recettes[ingredients][]']:checked").val(); // donne l'id si selected
+
+     var sortie=$( this).find("checkbox").attr("checked"); 
+
+    if (typeof entree !== 'undefined') // si la case est cochée
+    {
+
+        
+        // j'ajoute mon bloc tiré du prototype
+
+        var prototype =$('.ingredientsByRecettes').attr('data-prototype');
+
+       // console.log(prototype);
+      
+    var item="";
+
+     item = prototype
+        .replace(
+          /__name__/g,
+          // id unique
+          entree
+        )
+        .replace(
+            /value="+entree+"/g,
+            // id unique
+            /value="+entree+" selected/g
+          );
+
+        //console.log(item);
+        
+    }
+
+    else
+    { 
+        // détruire les div en trop
+
+        var test=$(this).parent().find('.item'+entree).remove();
+     
+    }
+
+    var celuila="item"+entree;
+    // console.log(celuila);
+    
+    if ($('.quantity-options').children().hasClass(celuila))
+    {
+
+    }
+    else 
+    {
+     $('.quantity-options').append("<div class='item"+entree+"'>"+item+"</div>");
+    } 
+   
+    
+    });
+    
+
+
+
+</script>

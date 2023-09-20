@@ -30,6 +30,9 @@ class RecettesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+           // var_dump($recette);
+            //exit;
             $entityManager->persist($recette);
             $entityManager->flush();
 

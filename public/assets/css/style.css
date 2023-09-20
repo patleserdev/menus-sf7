@@ -64,3 +64,20 @@ text-shadow:1px 1px 1px green;
     padding-left:3px;
     padding-right:3px;
 }
+
+
+#recettes_ingredients .form-check
+{
+display:flex;
+align-items: center;
+justify-content: flex-start;
+}
+
+#recettes_ingredients .form-check div
+{
+display:flex;
+align-items: center;
+justify-content: center;
+border:1px solid black;
+width:50%;
+}

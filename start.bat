@@ -1,4 +1,7 @@
 @echo off
+
+C:\wamp64bis\wampmanager.exe
+
 symfony serve:start -d
 
 
