@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des mesures{% endblock %}
+
+{% block body %}
+<h1>Liste des mesures </h1>
+
+    {% if mesures|length > 15 %}
+    <a class="btn btn-primary mb-3" href="{{ path('app_mesures_new') }}">Nouvelle mesure</a>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mesure in mesures %}
+            <tr>
+                <td>{{ mesure.id }}</td>
+                <td>{{ mesure.title }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('app_mesures_show', {'id': mesure.id}) }}">Voir</a>
+                    <a class="btn btn-primary" href="{{ path('app_mesures_edit', {'id': mesure.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Aucun élément</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('app_mesures_new') }}">Nouvelle mesure</a>
+{% endblock %}

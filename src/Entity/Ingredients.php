@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\IngredientsRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Doctrine\ORM\Query\Expr\OrderBy;
+use App\Repository\IngredientsRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 #[ORM\Entity(repositoryClass: IngredientsRepository::class)]
+
 class Ingredients
 {
     #[ORM\Id]
@@ -28,7 +31,13 @@ class Ingredients
     private Collection $recettes;
 
     #[ORM\OneToMany(mappedBy: 'ingredient', targetEntity: IngredientsByRecette::class)]
+ 
     private Collection $ingredientsByRecettes;
+
+    #[ORM\ManyToOne(inversedBy: 'ingredients')]
+    #[ORM\OrderBy(["title" => "ASC"])]
+
+    private ?IngredientsCategorie $categorie = null;
 
   
 
@@ -137,6 +146,18 @@ class Ingredients
                 $ingredientsByRecette->setIngredient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategorie(): ?IngredientsCategorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?IngredientsCategorie $categorie): static
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }

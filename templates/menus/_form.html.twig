@@ -2,3 +2,58 @@
     {{ form_widget(form) }}
     <button class="btn btn-primary">{{ button_label|default('Sauvegarder') }}</button>
 {{ form_end(form) }}
+
+
+<!-- remplacer le contenu de #menu_recettes par ça -->
+<!-- précocher ceux dont l'id est déja coché -->
+
+<ul class="nav nav-tabs" id="recettes_tab" role="tablist">
+{% for recettescategorie in recettescategories %}
+    <li class="nav-item" role="presentation">
+      <button class="nav-link btn-primary" id="{{ recettescategorie.title}}-tab" data-bs-toggle="tab" data-bs-target="#{{ recettescategorie.title}}-tab-pane" type="button" role="tab" aria-controls="{{ recettescategorie.title}}-tab-pane" aria-selected="true">{{ recettescategorie.title|capitalize}}</button>
+    </li>
+
+{% endfor %}
+  </ul>
+
+  <div class="tab-content" id="recettes_tab_content">
+    {% for recettescategorie in recettescategories %}
+    <div class="tab-pane fade" id="{{ recettescategorie.title}}-tab-pane" role="tabpanel" aria-labelledby="{{ recettescategorie.title}}-tab" tabindex="0">
+ 
+          {% for recette in recettes %}
+
+            {% if recettescategorie.title == recette.categorie %}
+                
+                <div class="form-check">
+                <input type="checkbox" id="menus_recettes_{{ recette.id }}" name="menus[recettes][]" class="form-check-input" value="{{ recette.id }}" >
+                <label class="form-check-label" for="menus_recettes_{{ recette.id }}">{{ recette.titre }}</label></div>
+            {% endif %}
+
+        {% endfor %}
+    </div>
+        
+    {% endfor %}
+  </div>
+
+  <script>
+    $( document ).ready(function() {
+    
+    $('.form-check-input:checked').each(function(){
+
+    var recetteform=$(this).val();
+    console.log(recetteform);
+
+    $('#recettes_tab_content').find('#menus_recettes_'+recetteform).prop('checked', true);
+    })
+
+    var content_tab= $('#recettes_tab');
+    var content_tab_content= $('#recettes_tab_content');
+   
+    $('#menus_recettes').empty();
+    $('#menus_recettes').append(content_tab);
+    $('#menus_recettes').append(content_tab_content);
+    
+    })
+
+  </script>
+

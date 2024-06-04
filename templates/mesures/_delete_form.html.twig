@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_mesures_delete', {'id': mesure.id}) }}" onsubmit="return confirm('Etes-vous sûr de vouloir supprimer cette mesure?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ mesure.id) }}">
+    <button class="btn btn-primary">Supprimer</button>
+</form>

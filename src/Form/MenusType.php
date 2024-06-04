@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Menus;
 use App\Entity\Recettes;
-
+use App\Repository\RecettesRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -27,7 +27,9 @@ class MenusType extends AbstractType
                 'required' => false,
                 // looks for choices from this entity
                 'class' => Recettes::class,
-            
+                'query_builder' => function(RecettesRepository $RecettesRepository) { 
+                    return $RecettesRepository->createQueryBuilder('u')->orderBy('u.titre', 'ASC');
+                },
                 // uses the User.username property as the visible option string
                 'choice_label' => 'titre',
             
@@ -37,6 +39,7 @@ class MenusType extends AbstractType
             ]);
 
           
+           
 
 
         ;

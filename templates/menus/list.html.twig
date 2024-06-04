@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste de courses{% endblock %}
+
+{% block body %}
+    <h1>Liste de courses</h1>
+
+    <hr>
+    <a class="btn btn-primary"  href="{{ path('app_menus_generate', {'id': menu.id}) }}">Générer liste de courses en pdf</a>
+    <a class="btn btn-primary"  href="{{ path('app_menus_new') }}">Nouveau menu</a>
+    <a  class="btn btn-primary" href="{{ path('app_menus_print', {'id': menu.id}) }}">Afficher liste de courses version pdf</a>
+    <hr>
+    
+    <h2>Déroulé des ingrédients par recette</h2>
+    <ul><h3>{{ menu.title|capitalize }}</h3>
+
+
+        {% for recette in menu.recettes %}
+        
+        <li>{{recette.titre}}
+            <ul>
+            {% for quantity in recette.ingredientsbyrecettes %}
+           
+            <li> {{quantity.getIngredient}} {{quantity.getQuantity}} {{quantity.getMesure}}</li>
+          
+            {% endfor %}
+         
+    
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+    <a class="btn btn-primary"  href="{{ path('app_menus_generate', {'id': menu.id}) }}">Générer liste de courses en pdf</a>
+    <a class="btn btn-primary"  href="{{ path('app_menus_new') }}">Nouveau menu</a>
+    <a  class="btn btn-primary" href="{{ path('app_menus_print', {'id': menu.id}) }}">Afficher liste de courses version pdf</a>
+    <hr>
+    
+{% endblock %}

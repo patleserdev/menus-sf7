@@ -1,0 +1,31 @@
+{% extends 'baseprint.html.twig' %}
+
+{% block title %}Liste de courses{% endblock %}
+
+{% block body %}
+    <h1>Liste de courses</h1>
+
+    <h3>{{ menu.title|capitalize }}</h3>
+ 
+<div class="container-fluid"> 
+    <div class="row">
+
+{% for ingredients_categorie in ingredients_categories %}
+
+        <div class="col-md-4 border p-2">
+        <h3>{{ingredients_categorie.title}}</h3>
+
+            {% for ingredient in ingredients %}
+
+                {% if ingredients_categorie.id ==  ingredient.categorie %}
+                
+                <li>{{ingredient.ingredient}} - {{ingredient.quantity}} {{ingredient.mesure}} 
+                </li>
+                
+                {% endif %}
+            {% endfor %}
+            </div>
+{% endfor %}    
+    </div>
+</div>
+{% endblock %}

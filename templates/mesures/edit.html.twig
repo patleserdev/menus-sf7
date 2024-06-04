@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Mesure{% endblock %}
+
+{% block body %}
+    <h1>Modifier Mesures</h1>
+
+    {{ include('mesures/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    <a ckass="btn btn-primary" href="{{ path('app_mesures_index') }}">Retour à la liste</a>
+
+    {{ include('mesures/_delete_form.html.twig') }}
+{% endblock %}

@@ -5,16 +5,30 @@
 
 {{ form_row(form.description) }}
 
+{{ form_row(form.file) }}
+
+{{ form_row(form.categorie) }}
+
+{{ form_row(form.personnes) }}
+
+    <button class="btn btn-primary">{{ button_label|default('Sauvegarder') }}</button>
+
+
 {{ form_row(form.ingredients) }}
 
 
+
+
 <ul class="ingredientsByRecettes"
-    data-index="{{ form.ingredientsByRecettes|length > 0 ? form.ingredientsByRecettes|last.vars.name + 1 : 0 }}"
-    data-prototype="{{ form_widget(form.ingredientsByRecettes.vars.prototype.quantity)|e('html_attr') }}"
-
-
+    data-index="{{ form.ingredientsByRecettes|length > 0 ? form.ingredientsByRecettes|last.vars.name + 1 : 1  }}"
+    data-prototype="{{ form_widget(form.ingredientsByRecettes.vars.prototype)|e('html_attr') }}"
 >
 </ul>
+
+
+{{ form_row(form.instructions) }}
+
+{{ form_row(form.source) }}
 
     <button class="btn btn-primary">{{ button_label|default('Sauvegarder') }}</button>
 
@@ -26,68 +40,175 @@
 
 <script>
 
-    $( document ).ready(function() {
-    $("#recettes_ingredients").append("<div class='quantity-options'></div>");
-    });
+    // faire apparaître les éléments du data-prototype provenant du form.
+    // Cela permet de sélectionner un ingrédient et d'en préciser la quantité
+    // si je déselectionne l'élement , sa quantité disparaît 
+    // contrainte , attention, pas de changement de position des quantités , sinon oeufs au lieu de farine etc ...
 
-    
 
-     $('body').on('click','.form-check', function(){
-
-     var entree=$( this).find("input[type=checkbox][name='recettes[ingredients][]']:checked").val(); // donne l'id si selected
-
-     var sortie=$( this).find("checkbox").attr("checked"); 
-
-    if (typeof entree !== 'undefined') // si la case est cochée
-    {
-
-        
-        // j'ajoute mon bloc tiré du prototype
-
-        var prototype =$('.ingredientsByRecettes').attr('data-prototype');
+    function getPrototype(data){
+   
+       // tableau provenant du data-prototype
+       var prototype =$('.ingredientsByRecettes').attr('data-prototype');
 
        // console.log(prototype);
       
-    var item="";
+            var item="";
 
      item = prototype
         .replace(
           /__name__/g,
           // id unique
-          entree
+          data
         )
         .replace(
-            /value="+entree+"/g,
+            /value="+data+"/g,
             // id unique
-            /value="+entree+" selected/g
+            /value="+data+" selected/g
           );
-
-        //console.log(item);
-        
+          
+          return item;
     }
 
-    else
-    { 
-        // détruire les div en trop
-
-        var test=$(this).parent().find('.item'+entree).remove();
-     
-    }
-
-    var celuila="item"+entree;
-    // console.log(celuila);
+    $( document ).ready(function() {
     
-    if ($('.quantity-options').children().hasClass(celuila))
-    {
+    //$('.mesure').hide();
+    // je crée un conteneur pour mes quantités
+    var cases=$(this).find("input[type=checkbox][name='recettes[ingredients][]']");
+    $(cases).each(function(){
 
-    }
-    else 
-    {
-     $('.quantity-options').append("<div class='item"+entree+"'>"+item+"</div>");
-    } 
+    var id=$(this).val()
+    $(this).parent().append("<div class='quantity-options"+id+"'></div>")
+
+    })
+    // je récupère les valeurs des id checkés
+    var checked=$(this).find("input[type=checkbox][name='recettes[ingredients][]']:checked"); // donne l'id si selected
+    
+     // pour chaque element checké, je dois chercher dans le form quelle element correspond
+    // et afficher la ligne correspondante en face dans un container specifique
+    $(checked).each(function(){
+
+      var idchecked=$(this).val();
+     // console.log(idchecked);
+      var disponibleforms=$('#recettes_ingredientsByRecettes').children();
+
+      $(disponibleforms).each(function(){
+
+      var idselected=$(this).find('.form-select').first().val();
+      var formselected=$(this);
+         
+      //console.log(idselected);
+      //console.log(formselected);
+
+      // si la case est cochée et qu'un élément de formulaire contient des données
+      if (idchecked == idselected)
+      {
+        $('.quantity-options'+idchecked).append(formselected);
+        $('.quantity-options'+idchecked).children().children().children(":nth-child(1)").nextAll().hide();
+        $('.quantity-options'+idchecked).children().children().children().last().show();
+      
+        $('.quantity-options'+idchecked).find('label').hide();
+        $('.quantity-options'+idchecked).find('.mb-3').removeClass('mb-3')
+
+       // var mesure=$('.mesure').children('#'+idchecked).text();
+      // $('.quantity-options'+idchecked).children().children().append('<div class="ingmesure">en '+mesure+'</div>')
+
+      }
+
+      // id checké mais pas de quantité de précisée, mettre a 0 par défaut
+      })
+
+      // sinon je crée un élément de formulaire , recette et type d"ingrédient a remplir
+      var verify=$('.quantity-options'+idchecked).children();
+     // console.log('verify'+verify.length)
+      if (verify.length == 0)
+      {
+        var standardform=getPrototype(idchecked);
+        //console.log(standardform);
+        $('.quantity-options'+idchecked).append('<fieldset class>'+standardform+'</fieldset>');
+        $('.quantity-options'+idchecked).children().children().children(":nth-child(1)").nextAll().hide();
+        $('.quantity-options'+idchecked).children().children().children().last().show();
+       
+        $('.quantity-options'+idchecked).find('label').hide();
+        $('.quantity-options'+idchecked).find('.mb-3').removeClass('mb-3')
+        // ajouter la value ingredient selected
+        $('.quantity-options'+idchecked).find('.form-select').first().val(idchecked)
+        // ajouter la value recette
+      }
+     
+    })
+
+    // suppression du modèle
+      $('body #recettes_ingredientsByRecettes:nth-child(2)').parent().remove();
+
+
+      })
+
+    // quand je clic sur un des ingrédients, je fais apparaître son 'quantity'
+     $('body').on('click','.form-check', function(){
+
+
+     // si c'est coché
+     if ($(this).find("input[type=checkbox][name='recettes[ingredients][]']:checked").val())
+     {
+       
+        var id=$(this).find("input[type=checkbox][name='recettes[ingredients][]']:checked").val(); // donne l'id si selected
+        var newcontent=getPrototype(id);
+       
+        
+        // si l'element existe , je le remplace sinon j'insert apres le précédent
+        var verify=$('.quantity-options'+id).children();
+        console.log('verify'+verify.length)
+        if (verify.length == 0)
+        {
+      $('.quantity-options'+id).append('<fieldset class>'+newcontent+'</fieldset>');
+      $('.quantity-options'+id).children().children().children(":nth-child(1)").nextAll().hide();
+      $('.quantity-options'+id).children().children().children().last().show();
+      $('.quantity-options'+id).find('label').hide();
+      $('.quantity-options'+id).find('.mb-3').removeClass('mb-3')
+      // ajouter la value ingredient selected
+      $('.quantity-options'+id).find('.form-select').first().find('option[value="'+id+'"]').prop('selected', true);
+
+     // var mesure=$('.mesure').children('#'+id).text();
+      //$('.quantity-options'+id).children().children().append('<div class="ingmesure">en '+mesure+'</div>')
+        }
+      
+     }
+
+     // si c'est décoché
+     else
+     { 
+        console.log('unclick');
+        var id=$(this).children('input').val();
+        console.log(id);
+        
+        $('.quantity-options'+id).children().remove();
+        //$('.quantity-options'+id).find('input').first().val('')
+       // $('.quantity-options'+id).find('.form-select').first().find('option[value="'+id+'"]').prop('selected', false);
+
+       // pb lors du remove - nécessite de supprimer le contenu de ingredientbyrecette en ajax avant de valider le formulaire
+        
+       /**
+       $.ajax({
+              type: 'delete',
+                        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        method: "POST",
+        url: "/ingredients/by/recette/"+id,
+        data: { id: id }
+      })
+        .done(function( msg ) {
+          alert( 'Action ok');
+        });
+**/
+     }
+
+
+     
    
     
     });
+
+
     
 
 

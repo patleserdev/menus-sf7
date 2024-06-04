@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégorie de recettes{% endblock %}
+
+{% block body %}
+    <h1>Catégorie de recettes</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ recettes_categorie.id }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ recettes_categorie.title }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('app_recettes_categorie_index') }}">Retour à la liste</a>
+
+    <a class="btn btn-primary" href="{{ path('app_recettes_categorie_edit', {'id': recettes_categorie.id}) }}">Modifier</a>
+
+    {{ include('recettes_categorie/_delete_form.html.twig') }}
+{% endblock %}

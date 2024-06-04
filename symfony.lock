@@ -26,6 +26,18 @@
             "./migrations/.gitignore"
         ]
     },
+    "knplabs/knp-snappy-bundle": {
+        "version": "1.10",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.5",
+            "ref": "c81bdcf4a9d4e7b1959071457f9608631865d381"
+        },
+        "files": [
+            "./config/packages/knp_snappy.yaml"
+        ]
+    },
     "phpunit/phpunit": {
         "version": "9.6",
         "recipe": {
@@ -38,6 +50,21 @@
             "./.env.test",
             "./phpunit.xml.dist",
             "./tests/bootstrap.php"
+        ]
+    },
+    "symfony/asset-mapper": {
+        "version": "6.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.3",
+            "ref": "e8c46ba5e488fc2d7462ab6832559ab93867370a"
+        },
+        "files": [
+            "./assets/app.js",
+            "./assets/styles/app.css",
+            "./config/packages/asset_mapper.yaml",
+            "./importmap.php"
         ]
     },
     "symfony/console": {
@@ -190,6 +217,20 @@
         },
         "files": [
             "./config/packages/security.yaml"
+        ]
+    },
+    "symfony/stimulus-bundle": {
+        "version": "2.14",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.13",
+            "ref": "6acd9ff4f7fd5626d2962109bd4ebab351d43c43"
+        },
+        "files": [
+            "./assets/bootstrap.js",
+            "./assets/controllers.json",
+            "./assets/controllers/hello_controller.js"
         ]
     },
     "symfony/translation": {

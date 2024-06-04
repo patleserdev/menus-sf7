@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Life Miam{% endblock %}
 
 {% block body %}
 <style>
@@ -8,27 +8,142 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
+<div class="container-fluid">
     <h1>Gestion de nos menus</h1>
 
-    
-    <ul>Objectifs</ul>
-    <li>Générer une liste de menus pour la semaine <i class="bi bi-check"></i></li>
+        <div class="owl-carousel">
 
-        <li>En déduire une liste d'ingrédients gérés par nombre de personnes</li>
-        <li>Générer la liste de courses en pdf ou mail ou etc ...</li>
-        <li>Intégrer le menu joker</li>
-        <li>Dans les menus, pouvoir préciser la quantité de tel ou tel ingrédient basé sur les mesures des ingrédients</li>
+        {% for recette in recettes %}
+
+        {% if recette.file %}
+        <div>
+            <a target="_blank" href="{{ path('app_recettes_show', {'id': recette.id}) }}" >
+            <img class="img-fluid" src="/uploads/{{recette.file}}" alt="{{recette.titre}}" title="{{recette.titre}}">
+            </a>
+        </div>
+    
+
+        {% endif %}
+
+
+        {% endfor  %}
+  
+
+    </div>
+    
+
+<div class="row align-items-start justify-content-around" >
+
+    <div class="card recette-show col-md-5 mt-1 mb-1 mx-1 border shadow-lg"><!-- recette du jour -->
+        <div class="row">
+            <div class="col-md-12 mx-1">
+            <h2>La recette du moment</h2>
+            </div>
+        </div>
+        
+        <div class="row align-items-between justify-content-center ">
+        {% if randomRecette.getFile %}
+            <div class="col-md-6 ">
+
+           
+                <img src="/uploads/{{ randomRecette.getFile }}" class="card-img-top" alt="{{ randomRecette.getTitre }}">
+           
+            
+            </div>
+        {% else %}
+            <div class="col-md-6 ">
+                <img src="https://placehold.co/640x480" class="card-img-top" alt="{{ randomRecette.getTitre }}">
+        
+            </div>
+        {% endif %}
+            <div class="col-md-6">
+                <div class="row p-2 ">
+                        <h5 class="card-title">{{ randomRecette.getTitre|capitalize }}</h5>
+                        <p class="card-text">{{  randomRecette.getDescription }}</p>
+
+                    <div><!-- les ingrédients -->
+                        {% if randomRecette.getIngredients|length > 0 %}
+                  
+                            <h6>Ingrédients</h6>
+
+                            {% for ingredient in randomRecette.getIngredients %}
+                                {{ ingredient.title }} :
+
+                                {% for ingredientByRecette in ingredient.ingredientsByRecettes %}
+                                
+                                    {% if ingredientByRecette.recette.id == randomRecette.getId  %}
+
+                                    <b>{{ ingredientByRecette.quantity }}</b>
+
+        
+                                    {% endif %}
+
+                                {% endfor %}
+
+                                    {{ ingredient.mesure }}
+                                    <br/>
+
+
+                            {% endfor %}
+
+                        {% else %}
+                        
+                        <p>Les ingrédients ne sont pas renseignés</p>
+
+                        {% endif %}
+                    </div><!-- fin les ingrédients -->
+                </div>
+            </div>
+        </div>   
+<div class="card-body">
+    <a class="btn btn-primary" target="_blank" href="{{ path('app_recettes_show', {'id': randomRecette.id}) }}" >Voir la recette en détail</a>
+
+</div>
+    </div><!-- fin recette du jour -->
+   
+         
+    <div class="col-md-6 mt-1 mb-1 card border shadow-lg"><!-- Objectifs -->
+    <ul>Objectifs
+    <li>Pouvoir ajouter des ingrédients <i class="bi bi-check"></i>
+        <ul>
+            <li>Classer les ingrédients par catégories <i class="bi bi-check"></i></li>
+            <li>Filtrer les ingrédients par catégories en ajax <i class="bi bi-check"></i></li>
+        </ul>
+    </li>
+    
+    <li>Pouvoir ajouter des recettes contenant des ingrédients <i class="bi bi-check"></i>
+        <ul>
+            <li>Classer les recettes par catégories <i class="bi bi-check"></i></li>
+            <li>Filter les recettes par catégories en ajax<i class="bi bi-check"></i></li>
+            <li>Ajouter/Afficher des images dans les recettes <i class="bi bi-check"></i></li>
+        </ul>
+    </li>
+
+    <li>Pouvoir ajouter des menus contenant des recettes <i class="bi bi-check"></i></li>
     </ul>
 
+    <ul>Nouveaux objectifs
+    <li>Dans le formulaire de recettes, filtrer l'affichage des ingrédients par catégories</li>
+    <li>Gérer les multiples de quantités , indiquer dans la recette pour combien et en front multiplier ou diviser <i class="bi bi-check"></i></li>   
+    <li>Générer une liste de menus pour la semaine <i class="bi bi-check"></i></li>
+    <li>En déduire une liste d'ingrédients gérés par nombre de personnes</li>
+    <li>Générer la liste de courses en pdf ou mail ou etc ... <i class="bi bi-check"></i></li>
+    <li>Intégrer le menu joker</li>
+    <li>Dans les menus, pouvoir préciser la quantité de tel ou tel ingrédient basé sur les mesures des ingrédients <i class="bi bi-check"></i></li>
+    </ul>
 
-    <ul>Objets nécessaires
-    <li>Menu - titre - description - relation recette (OnetoMany) <i class="bi bi-check"></i>
-    </li>
-    <li>recette - titre - description - date - relation menu (OnetoMany) - relation ingrédients(OnetoMany) <i class="bi bi-check"></i>
-    </li>
-    <li>Ingrédients - titre - description - mesure <i class="bi bi-check"></i>
-    </li>
+    <ul>Bonus
+    <li>Carousel OWL sur la page d'accueil <i class="bi bi-check"></i></li>
+    <li>La recette du moment (random) sur la page d'accueil <i class="bi bi-check"></i></li>
+
+    </ul>
+
+    <ul>Contraintes
+    <li>Problèmes d'ordre des ingrédients ou recettes dans les formulaires <i class="bi bi-check"></i></li>
+    </ul>
+    </div><!-- fin Objectifs -->
+</div>
+
     
 </div>
 

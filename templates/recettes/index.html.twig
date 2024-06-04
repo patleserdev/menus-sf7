@@ -5,21 +5,64 @@
 {% block body %}
     <h1>Liste des recettes</h1>
 
+        {% if recettes|length > 15 %}
+
+        <a  class="btn btn-primary mb-3" href="{{ path('app_recettes_new') }}">Nouvelle recette</a>    
+        {% endif %}
+
+   
+
+        <form method="post" action="/action_page.php">
+        <select id="RecettesCat" class="form-select" aria-label="Default select example">
+            <option selected> Filtrer par :</option>
+            <option value="0">Toutes</option>
+        {% for categorie in recettes_categories %}
+            <option value=" {{ categorie.id }}">{{ categorie.title }}</option>
+        {% endfor %} 
+        </select>
+       
+        </form>
+
+
     <table class="table">
         <thead>
             <tr>
+                <th>Nombre</th>
                 <th>Id</th>
                 <th>Titre</th>
                 <th>Description</th>
+                <th>Catégorie</th>
+                <th>Parts</th>
+                <th>Ingredients</th>
+                <th>Instructions</th>
+                <th>Photo</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
+        {% set compteur = 0%}
         {% for recette in recettes %}
+
+          {% set compteur = compteur + 1 %}
             <tr>
+            <td>{{ compteur }}</td>
                 <td>{{ recette.id }}</td>
-                <td>{{ recette.titre }}</td>
-                <td>{{ recette.description }}</td>
+                <td>{{ recette.titre|capitalize }}</td>
+                <td>{{ recette.description|capitalize }}</td>
+                <td>{{ recette.categorie }}</td>
+                <td>{{ recette.personnes }}</td>
+                <td {% if recette.ingredients|length > 0 %}  <b style="color:green;text-align:center"><i class="bi bi-check-circle-fill"></i></b> {% else %}<b style="color:red;text-align:center"> <i class="bi bi-x-circle-fill"></i> </b> {% endif %}</td>
+                <td>{% if recette.instructions|length > 0 %} <b style="color:green;text-align:center"><i class="bi bi-check-circle-fill"></i></b> {% else %}<b style="color:red;text-align:center"> <i class="bi bi-x-circle-fill"></i> </b>{% endif %}</td>   
+                <td><a  href="{{ path('app_recettes_show', {'id': recette.id}) }}">
+
+                {% if recette.file %}
+                <img width="50px" src="/uploads/{{ recette.file }}">
+                {% else %}
+                <img width="50px" src="/assets/images/placeholder.png">
+                {% endif %}
+            </a>
+            
+            </td>
                 <td>
                     <a  class="btn btn-primary" href="{{ path('app_recettes_show', {'id': recette.id}) }}">Voir</a>
                     <a  class="btn btn-primary" href="{{ path('app_recettes_edit', {'id': recette.id}) }}">Modifer</a>

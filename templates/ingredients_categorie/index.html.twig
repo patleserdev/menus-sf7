@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des catégories d'ingrédients{% endblock %}
+
+{% block body %}
+    <h1>Liste des catégories d'ingrédients</h1>
+
+    {% if ingredients_categories|length > 10 %}
+    <a class="btn btn-primary mb-3" href="{{ path('app_ingredients_categorie_new') }}">Nouvelle catégorie</a>
+    {% endif %}
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ingredients_categorie in ingredients_categories %}
+            <tr>
+                <td>{{ ingredients_categorie.id }}</td>
+                <td>{{ ingredients_categorie.title }}</td>
+                <td>{{ ingredients_categorie.description }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('app_ingredients_categorie_show', {'id': ingredients_categorie.id}) }}">Voir</a>
+                    <a class="btn btn-primary" href="{{ path('app_ingredients_categorie_edit', {'id': ingredients_categorie.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucune catégorie</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('app_ingredients_categorie_new') }}">Nouvelle catégorie</a>
+{% endblock %}

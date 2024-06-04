@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\IngredientsByRecetteRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\IngredientsByRecetteRepository;
 
 #[ORM\Entity(repositoryClass: IngredientsByRecetteRepository::class)]
 class IngredientsByRecette
@@ -18,11 +18,15 @@ class IngredientsByRecette
 
     #[ORM\ManyToOne(inversedBy: 'ingredientsByRecettes')]
     #[ORM\JoinColumn(nullable: false)]
+   
     private ?Ingredients $ingredient = null;
 
     #[ORM\ManyToOne(inversedBy: 'ingredientsByRecettes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Recettes $recette = null;
+
+    #[ORM\ManyToOne(inversedBy: 'ingredientsByRecettes')]
+    private ?Mesures $mesure = null;
 
     public function getId(): ?int
     {
@@ -61,6 +65,18 @@ class IngredientsByRecette
     public function setRecette(?Recettes $recette): static
     {
         $this->recette = $recette;
+
+        return $this;
+    }
+
+    public function getMesure(): ?Mesures
+    {
+        return $this->mesure;
+    }
+
+    public function setMesure(?Mesures $mesure): static
+    {
+        $this->mesure = $mesure;
 
         return $this;
     }

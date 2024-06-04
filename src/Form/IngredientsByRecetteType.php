@@ -15,6 +15,7 @@ class IngredientsByRecetteType extends AbstractType
             ->add('quantity')
             ->add('ingredient')
             ->add('recette')
+            ->add('mesure')
         ;
     }
 

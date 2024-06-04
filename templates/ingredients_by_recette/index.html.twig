@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des ingrédients par recettes{% endblock %}
+
+{% block body %}
+    <h1>IngredientsByRecette index</h1>
+
+    {% if ingredients_by_recettes|length > 15 %}
+    <a class="btn btn-primary mb-3" href="{{ path('app_ingredients_by_recette_new') }}">Nouveau</a>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Quantity</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ingredients_by_recette in ingredients_by_recettes %}
+            <tr>
+                <td>{{ ingredients_by_recette.id }}</td>
+                <td>{{ ingredients_by_recette.quantity }}</td>
+                <td>
+                    <a href="{{ path('app_ingredients_by_recette_show', {'id': ingredients_by_recette.id}) }}">Voir</a>
+                    <a href="{{ path('app_ingredients_by_recette_edit', {'id': ingredients_by_recette.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Pas d'enregistrements</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ingredients_by_recette_new') }}">Nouveau</a>
+{% endblock %}

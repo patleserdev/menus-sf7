@@ -1,4 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@font-face {
+    font-family: "Poppins";
+    src:
+    
+      url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap")
+
+  }
+
+*
+{
+font-family: "Poppins", sans-serif;
+}
 
 .form-control,.form-select {
    
@@ -6,11 +19,80 @@
     
 }
 
+.btn-primary
+{
+background-color: #0fce81;
+border-color: #032417;
+color:#000;
+}
+
+.btn-primary:hover
+{
+background-color: #07613d;
+border-color: #0fce81;
+
+color:#fff;
+}
+
+td
+{
+vertical-align: middle;
+}
+
+/** owl carousel **/
+
+.owl-prev,.owl-next
+{
+    transform:scaleX(7)scaleY(10);
+
+
+    position:absolute;
+    
+}
+
+.owl-prev
+{
+    left:-50px;
+    top:50%;
+}
+
+.owl-prev span
+{
+    color:#fff;
+}
+
+
+
+.owl-next
+{
+   right:-50px;
+   top:50%;
+}
+
+.owl-carousel .owl-item
+{
+    object-fit: cover;
+    height:100%;
+    width:100%;
+}
+
+.owl-carousel .owl-item img
+{
+    object-fit: cover;
+    height: 350px;  ;
+    
+}
+
+/** fin owl carousel **/
+
+
+
 .fond
 {
-    background: rgb(9,121,76);
-background: linear-gradient(90deg, rgba(9,121,76,1) 38%, rgba(255,255,255,1) 100%);
-border:1px solid black;
+background: rgb(9,121,76);
+/*background: linear-gradient(90deg, rgba(9,121,76,1) 38%, rgba(255,255,255,1) 100%);*/
+
+min-height: 85vh;
 }
 
 *
@@ -18,7 +100,7 @@ border:1px solid black;
     box-sizing: border-box;
     margin:0;
     padding:0;
-    font-family: 'Poppins', sans-serif;
+
 }
 
 body{
@@ -66,18 +148,131 @@ text-shadow:1px 1px 1px green;
 }
 
 
+#recettes_ingredientsByRecettes
+{
+   
+   display:flex;
+   flex-direction: column;
+   margin:0;
+   padding:0;
+   box-sizing: border-box;
+}
+
+
+#recettes_ingredients
+{
+    position:relative;
+   
+}
+
 #recettes_ingredients .form-check
 {
 display:flex;
 align-items: center;
+justify-content: space-between;
+
+padding-left:100px;
+
+border-bottom:1px solid white;
+color:white;
+
+}
+
+#recettes_ingredients .form-check label
+{
+    
+display:flex;
+align-items: flex-start;
 justify-content: flex-start;
+width:20%;
+
+
 }
 
 #recettes_ingredients .form-check div
 {
+    
 display:flex;
 align-items: center;
-justify-content: center;
-border:1px solid black;
+justify-content: flex-start;
+width:60%;
+
+}
+
+#recettes_ingredients .form-check div input
+{
+    
 width:50%;
+margin:0;
+padding:0;
+}
+
+#recettes_ingredients .form-check div input ::content
+{
+    
+text-align: center;
+}
+
+#recettes_ingredients .form-check div fieldset
+{
+    
+display:flex;
+flex-direction: column;
+
+width:100%;
+}
+
+#recettes_ingredients .form-select
+{
+    margin:0;
+    padding:0;
+}
+
+.mesure 
+{
+    display:none;
+    
+}
+
+.ingmesure
+{
+    padding-left:10px;
+    
+}
+
+.recette-show
+{
+    position: relative;
+}
+
+.buttons
+{
+    position: absolute;
+    right: 0;
+    bottom:0;
+    display:flex;
+    padding-bottom:5px;
+   
+}
+
+.buttons div
+{
+    padding-right:5px;
+}
+
+
+.recette-show .image
+{
+    margin:0;
+    padding:0;
+    height: 100%;
+    object-fit: cover;
+  
+}
+
+.card-img-top
+{
+    padding: 0;
+    margin:0;
+   
 }

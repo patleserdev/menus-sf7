@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier une catégorie de Recettes{% endblock %}
+
+{% block body %}
+    <h1>Modifier une catégorie de Recettes</h1>
+
+    {{ include('recettes_categorie/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    <a class="btn btn-primary" href="{{ path('app_recettes_categorie_index') }}">Retour à la liste</a>
+
+    {{ include('recettes_categorie/_delete_form.html.twig') }}
+{% endblock %}

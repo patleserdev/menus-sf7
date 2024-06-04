@@ -5,23 +5,41 @@
 {% block body %}
     <h1>Liste des ingrédients</h1>
 
+    {% if ingredients|length > 15 %}
+    <a class="btn btn-primary mb-3" href="{{ path('app_ingredients_new') }}">Nouvel ingrédient</a>
+    {% endif %}
+
+        
+        <form method="post" action="/action_page.php">
+        <select id="IngredientCat" class="form-select" aria-label="Default select example">
+            <option selected> Filtrer par :</option>
+            <option value="0">Toutes</option>
+        {% for categorie in ingredients_categories %}
+            <option value=" {{ categorie.id }}">{{ categorie.title }}</option>
+        {% endfor %} 
+        </select>
+       
+        </form>
+
+
     <table class="table">
+
         <thead>
             <tr>
-                <th>Id</th>
+               
                 <th>Titre</th>
                 <th>Description</th>
-                <th>Mesure</th>
+                <th>Catégorie</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for ingredient in ingredients %}
             <tr>
-                <td>{{ ingredient.id }}</td>
+               
                 <td>{{ ingredient.title }}</td>
                 <td>{{ ingredient.description }}</td>
-                <td>{{ ingredient.mesure }}</td>
+                <td>{{ ingredient.categorie }}</td>
                 <td>
                     <a  class="btn btn-primary" href="{{ path('app_ingredients_show', {'id': ingredient.id}) }}">Voir</a>
                     <a  class="btn btn-primary" href="{{ path('app_ingredients_edit', {'id': ingredient.id}) }}">Modifier</a>
@@ -34,6 +52,7 @@
         {% endfor %}
         </tbody>
     </table>
+
 
     <a class="btn btn-primary" href="{{ path('app_ingredients_new') }}">Nouvel ingrédient</a>
 {% endblock %}

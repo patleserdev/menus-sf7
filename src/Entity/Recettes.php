@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\RecettesRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Query\Expr\OrderBy;
+use App\Repository\RecettesRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: RecettesRepository::class)]
 class Recettes
@@ -22,13 +24,33 @@ class Recettes
     private ?string $description = null;
 
     #[ORM\ManyToMany(targetEntity: Ingredients::class, inversedBy: 'recettes')]
+    #[ORM\OrderBy(["title" => "ASC"])]
     private Collection $ingredients;
+    
 
     #[ORM\ManyToMany(targetEntity: Menus::class, mappedBy: 'recettes')]
     private Collection $menuses;
 
-    #[ORM\OneToMany(mappedBy: 'recette', targetEntity: IngredientsByRecette::class,cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: 'recette',orphanRemoval:true , targetEntity: IngredientsByRecette::class,cascade: ["persist"])]
+    
     private Collection $ingredientsByRecettes;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $file = null;
+
+    #[ORM\ManyToOne(inversedBy: 'recettes')]
+    #[OrderBy(["title" => "DESC"])]
+    private ?RecettesCategorie $categorie = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $personnes = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $instructions = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $source = null;
+   
 
     public function __construct()
     {
@@ -71,8 +93,12 @@ class Recettes
      */
     public function getIngredients(): Collection
     {
+        
         return $this->ingredients;
+    
+
     }
+    
 
     public function addIngredient(ingredients $ingredient): static
     {
@@ -149,6 +175,66 @@ class Recettes
                 $ingredientsByRecette->setRecette(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFile(): ?string
+    {
+        return $this->file;
+    }
+
+    public function setFile(?string $file): static
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?RecettesCategorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?RecettesCategorie $categorie): static
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getPersonnes(): ?int
+    {
+        return $this->personnes;
+    }
+
+    public function setPersonnes(?int $personnes): static
+    {
+        $this->personnes = $personnes;
+
+        return $this;
+    }
+
+    public function getInstructions(): ?string
+    {
+        return $this->instructions;
+    }
+
+    public function setInstructions(?string $instructions): static
+    {
+        $this->instructions = $instructions;
+
+        return $this;
+    }
+
+    public function getSource(): ?string
+    {
+        return $this->source;
+    }
+
+    public function setSource(?string $source): static
+    {
+        $this->source = $source;
 
         return $this;
     }

@@ -5,6 +5,10 @@
 {% block body %}
     <h1>Menus index</h1>
 
+    {% if menuses|length > 15 %}
+    <a class="btn btn-primary mb-3"  href="{{ path('app_menus_new') }}">Nouveau menu</a>
+    {% endif %}
+
     <table class="table">
         <thead>
             <tr>
@@ -22,7 +26,8 @@
                 <td>{{ menu.description }}</td>
                 <td>
                     <a  class="btn btn-primary" href="{{ path('app_menus_show', {'id': menu.id}) }}">Voir</a>
-                    <a  class="btn btn-primary" href="{{ path('app_menus_edit', {'id': menu.id}) }}">Modifier
+                    <a  class="btn btn-primary" href="{{ path('app_menus_edit', {'id': menu.id}) }}">Modifier</a>
+                    <a  class="btn btn-primary" href="{{ path('app_menus_list', {'id': menu.id}) }}">Générer la liste de courses</a>
             </tr>
         {% else %}
             <tr>

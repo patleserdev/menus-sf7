@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des catégories de recettes{% endblock %}
+
+{% block body %}
+    <h1>Liste des catégories de recettes</h1>
+
+    {% if recettes_categories|length > 15 %}
+
+    <a class="btn btn-primary mb-3" href="{{ path('app_recettes_categorie_new') }}">Nouvelle catégorie</a>
+
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for recettes_categorie in recettes_categories %}
+            <tr>
+                <td>{{ recettes_categorie.id }}</td>
+                <td>{{ recettes_categorie.title|capitalize }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('app_recettes_categorie_show', {'id': recettes_categorie.id}) }}">Voir</a>
+                    <a class="btn btn-primary" href="{{ path('app_recettes_categorie_edit', {'id': recettes_categorie.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Aucune catégorie</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('app_recettes_categorie_new') }}">Nouvelle catégorie</a>
+{% endblock %}

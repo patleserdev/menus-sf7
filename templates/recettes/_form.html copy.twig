@@ -1,0 +1,234 @@
+{{ form_start(form) }}
+
+
+{{ form_row(form.titre) }}
+
+{{ form_row(form.description) }}
+
+{{ form_row(form.categorie) }}
+
+{{ form_row(form.file) }}
+
+{{ form_row(form.ingredients) }}
+
+
+<ul class="ingredientsByRecettes"
+    data-index="{{ form.ingredientsByRecettes|length > 0 ? form.ingredientsByRecettes|last.vars.name + 1 : 1  }}"
+    data-prototype="{{ form_widget(form.ingredientsByRecettes.vars.prototype)|e('html_attr') }}"
+>
+</ul>
+
+    <button class="btn btn-primary">{{ button_label|default('Sauvegarder') }}</button>
+
+
+{{ form_end(form) }}
+
+
+
+
+<script>
+
+    // faire apparaître les éléments du data-prototype provenant du form.
+    // Cela permet de sélectionner un ingrédient et d'en préciser la quantité
+    // si je déselectionne l'élement , sa quantité disparaît 
+    // contrainte , attention, pas de changement de position des quantités , sinon oeufs au lieu de farine etc ...
+
+
+    function getPrototype(data){
+    ++data
+       // tableau provenant du data-prototype
+       var prototype =$('.ingredientsByRecettes').attr('data-prototype');
+
+       // console.log(prototype);
+      
+            var item="";
+
+     item = prototype
+        .replace(
+          /__name__/g,
+          // id unique
+          data
+        )
+        .replace(
+            /value="+data+"/g,
+            // id unique
+            /value="+data+" selected/g
+          );
+          
+          return item;
+    }
+
+    $( document ).ready(function() {
+    
+    // je crée un conteneur pour mes quantités
+    $("#recettes_ingredients").append("<div class='quantity-options'></div>");
+
+    // je récupère les valeurs des id checkés
+    var checked=$(this).find("input[type=checkbox][name='recettes[ingredients][]']:checked"); // donne l'id si selected
+    
+    var content=$('#recettes_ingredientsByRecettes').clone();
+
+
+    $(checked).each(function(){
+      var id=$(this).val() 
+
+      var idselected=$(content).find('#recettes_ingredientsByRecettes_'+id+'_ingredient').children().attr('selected');
+      var value=$(content).find('#recettes_ingredientsByRecettes_'+id+'_ingredient').children('option:selected').val();
+     
+      console.log('id'+id+'ididselected'+idselected+'value'+value);
+    })
+
+    
+
+  
+    
+
+    /**************/
+
+    // je récupère le data prototype, je nettoye un peu et j'append dans mon div
+    $(content).children('fieldset').attr('class','test')
+    $(content).children('fieldset').children().children().children('label').hide();
+    $(content).children('fieldset').children('div').children("div:nth-child(1)").nextAll().hide();
+    $(content).children('fieldset').removeClass('mb-3')
+    $(content).appendTo('.quantity-options');
+
+    //$('body #recettes_ingredientsByRecettes:nth-child(2)').parent().remove();
+
+    // je renomme class des fieldset pour la suite
+    var elements=$('#recettes_ingredientsByRecettes').children('fieldset')
+    //console.log(elements)
+    $(elements).each(function(){
+    var onechecked=$(this).children('div').attr('id');
+    //console.log(onechecked)
+    var idchecked=onechecked.substr(-1, 1);
+    idchecked=idchecked++
+    //console.log(this);
+
+    $(this).attr('class','element'+idchecked)
+
+    /** je modifie les id pour test si decalage corrigé **/
+     /*** content juste **/
+     $(checked).each(function(){
+     var id=$(this).val() 
+     --id;
+     var idinf=id
+     id=++id
+   
+  /*
+     $('.element'+idinf).children('div').attr('id','recettes_ingredientsByRecettes_'+id)
+     $('.element'+idinf).children('div').children().children('label').attr('for','recettes_ingredientsByRecettes_'+id+'_quantity')
+     $('.element'+idinf).children('div').children().children('input').attr('id','recettes_ingredientsByRecettes_'+id+'_quantity')
+     $('.element'+idinf).children('div').children().children('input').attr('name','recettes[ingredientsByRecettes]['+id+'][quantity]')
+*/
+/**
+<div id="recettes_ingredientsByRecettes_0">
+<div class="mb-3">
+<label for="recettes_ingredientsByRecettes_0_quantity" 
+class="form-label required" style="display: none;">Quantity</label>
+<input type="number" id="recettes_ingredientsByRecettes_0_quantity" 
+name="recettes[ingredientsByRecettes][0][quantity]" required="required" class="form-control" value="300">       
+</div>
+
+<div class="mb-3" style="display: none;">
+<label class="form-label required" for="recettes_ingredientsByRecettes_0_ingredient" 
+style="display: none;">Ingredient</label>
+<select id="recettes_ingredientsByRecettes_0_ingredient" 
+name="recettes[ingredientsByRecettes][0][ingredient]" class="form-select">
+<option value="1">farine t55
+</option>
+<option value="2" selected="selected">oeuf</option>
+<option value="3">lait</option>
+<option value="4">sucre</option>
+</select>        </div>
+<div class="mb-3" style="display: none;"><label class="form-label required" 
+for="recettes_ingredientsByRecettes_0_recette" style="display: none;">Recette</label><selec
+t id="recettes_ingredientsByRecettes_0_recette" name="recettes[ingredientsByRecettes][0][recette]" 
+class="form-select"><option value="1" selected="selected">crêpes</option><option value="2">crêpes</option></select>        </div></div>
+   **/
+     // si pas de valeur dans content , je l'ajoute car il est coché
+     // sinon je remplace les ids partout
+ 
+    
+     })
+
+    })
+
+      })
+
+    // quand je clic sur un des ingrédients, je fais apparaître son 'quantity'
+     $('body').on('click','.form-check', function(){
+
+
+     // si c'est coché
+     if ($(this).find("input[type=checkbox][name='recettes[ingredients][]']:checked").val())
+     {
+       
+        var id=$(this).find("input[type=checkbox][name='recettes[ingredients][]']:checked").val(); // donne l'id si selected
+        
+        var newcontent=getPrototype(id);
+        id=--id;
+        var position=--id;
+        
+        id=++id
+        console.log(position)
+
+        // si l'element existe , je le remplace sinon j'insert apres le précédent
+        var verify=$('.element'+id)
+        console.log('verify'+verify.length)
+        if (verify.length == 0)
+        {
+        $("<fieldset class='element"+id+"'>"+newcontent+"</fieldset>").insertAfter('.element'+position);
+        }
+
+        if (verify.length == 1)
+        { 
+
+
+            console.log($('.element'+id).css("display"));
+        //$('element'+id).replaceWith("<fieldset class='element"+id+"'>"+newcontent+"</fieldset>");
+        $('.element'+id).show();
+        }
+
+       // je dois composer un tableau pour trouver ou est la bonne position
+
+           // j'ajoute le contenu
+        //$('.quantity-options').children('#recettes_ingredientsByRecettes').append("<fieldset class>"+newcontent+"</fieldset>");
+
+        // je cache le label
+        $("#recettes_ingredientsByRecettes_"+id).children("div:nth-child(1)").children('label').hide();
+    
+        // je cache les élémens suivants mais nécessaires à la validation du formulaire
+        $("#recettes_ingredientsByRecettes_"+id).children("div:nth-child(1)").nextAll().hide();
+
+        // je change la classe qui me gène
+        $("#recettes_ingredientsByRecettes_"+id).children('fieldset').removeClass('mb-3') 
+
+    
+
+
+     }
+
+     // si c'est décoché
+     else
+     { 
+        console.log('unclick');
+        var id=$(this).children('input').val();
+        console.log(id);
+        id=id-1;
+        $('.quantity-options').children().find('.element'+id).hide();
+        
+
+     }
+
+
+     
+   
+    
+    });
+
+
+    
+
+
+
+</script>

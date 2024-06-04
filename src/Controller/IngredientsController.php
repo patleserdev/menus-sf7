@@ -4,23 +4,71 @@ namespace App\Controller;
 
 use App\Entity\Ingredients;
 use App\Form\IngredientsType;
-use App\Repository\IngredientsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\IngredientsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\IngredientsCategorieRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 #[Route('/ingredients')]
 class IngredientsController extends AbstractController
 {
     #[Route('/', name: 'app_ingredients_index', methods: ['GET'])]
-    public function index(IngredientsRepository $ingredientsRepository): Response
+    public function index(Request $request, IngredientsRepository $ingredientsRepository,IngredientsCategorieRepository $ingredientsCategorieRepository): Response
     {
+        $categorie=$request->get('categorie');
+        if (isset($categorie))
+       {
+
+        if ($categorie != 0)
+        {
+            return $this->render('ingredients/index.html.twig', [
+                //'ingredients' => $ingredientsRepository->findA[ll(),
+               // 'ingredients' => $ingredientsRepository->findBy(array(),array('title' => 'ASC'),NULL,NULL),
+                'ingredients_categories' => $ingredientsCategorieRepository->findBy(array(),array('title' => 'ASC'),NULL,NULL),
+    
+                'ingredients' => $ingredientsRepository->findBy(array('categorie' => $categorie),array('title' => 'ASC'),NULL,NULL),
+    
+            ]);
+
+        }
+
+        else
+        {
+
+            return $this->render('ingredients/index.html.twig', [
+                //'ingredients' => $ingredientsRepository->findA[ll(),
+               // 'ingredients' => $ingredientsRepository->findBy(array(),array('title' => 'ASC'),NULL,NULL),
+                'ingredients_categories' => $ingredientsCategorieRepository->findBy(array(),array('title' => 'ASC'),NULL,NULL),
+    
+                'ingredients' => $ingredientsRepository->findBy(array(),array('title' => 'ASC'),NULL,NULL),
+    
+            ]);
+        }
+       
+        
+    
+       }
+
+       else
+       {
         return $this->render('ingredients/index.html.twig', [
-            'ingredients' => $ingredientsRepository->findAll(),
+            //'ingredients' => $ingredientsRepository->findA[ll(),
+           // 'ingredients' => $ingredientsRepository->findBy(array(),array('title' => 'ASC'),NULL,NULL),
+            'ingredients_categories' => $ingredientsCategorieRepository->findBy(array(),array('title' => 'ASC'),NULL,NULL),
+
+            'ingredients' => $ingredientsRepository->findBy(array(),array('title' => 'ASC'),NULL,NULL),
+
         ]);
+       }
+
+    
     }
+
+
 
     #[Route('/new', name: 'app_ingredients_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -30,8 +78,12 @@ class IngredientsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $ingredient->setMesure('');
+
             $entityManager->persist($ingredient);
             $entityManager->flush();
+            $this->addFlash('success','Ingrédient ajouté');
 
             return $this->redirectToRoute('app_ingredients_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -58,6 +110,7 @@ class IngredientsController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $this->addFlash('success','Ingrédient modifié');
 
             return $this->redirectToRoute('app_ingredients_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -74,6 +127,8 @@ class IngredientsController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$ingredient->getId(), $request->request->get('_token'))) {
             $entityManager->remove($ingredient);
             $entityManager->flush();
+            $this->addFlash('warning','Ingrédient supprimée');
+
         }
 
         return $this->redirectToRoute('app_ingredients_index', [], Response::HTTP_SEE_OTHER);
